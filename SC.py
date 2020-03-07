@@ -93,7 +93,7 @@ class SC(object):
             sn = zeros((self.nbins_r, self.nbins_theta))
             for j in range(len(points)):
                 if (fz[i, j]):
-                    sn[r_array_q[i, j] - 1, theta_array_q[i, j] - 1] += 1
+                    sn[r_array_q[i, j] - 1, int(theta_array_q[i, j] - 1)] += 1
             BH[i] = sn.reshape(self.nbins)
 
         print('PROFILE TOTAL COST: ' + str(time.time()-t))

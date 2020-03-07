@@ -36,9 +36,9 @@ You could use this code to generate the traversal indexes::
             results.insert(len(results), a)
 
         else:
-            for i in xrange(0, len(a)):
+            for i in range(0, len(a)):
                 element = a[i]
-                a_copy = [a[j] for j in xrange(0, len(a)) if j != i]
+                a_copy = [a[j] for j in range(0, len(a)) if j != i]
                 subresults = []
                 permute(a_copy, subresults)
                 for subresult in subresults:
@@ -62,9 +62,9 @@ and calculate the smallest cost of the combinations::
 
     n = len(matrix)
     minval = sys.maxint
-    for row in xrange(n):
+    for row in range(n):
         cost = 0
-        for col in xrange(n):
+        for col in range(n):
             cost += matrix[row][col]
         minval = min(cost, minval)
 
@@ -388,8 +388,8 @@ class Munkres:
         self.n = len(self.C)
         self.original_length = len(cost_matrix)
         self.original_width = len(cost_matrix[0])
-        self.row_covered = [False for i in xrange(self.n)]
-        self.col_covered = [False for i in xrange(self.n)]
+        self.row_covered = [False for i in range(self.n)]
+        self.col_covered = [False for i in range(self.n)]
         self.Z0_r = 0
         self.Z0_c = 0
         self.path = self.__make_matrix(self.n * 2, 0)
@@ -414,8 +414,8 @@ class Munkres:
 
         # Look for the starred columns
         results = []
-        for i in xrange(self.original_length):
-            for j in xrange(self.original_width):
+        for i in range(self.original_length):
+            for j in range(self.original_width):
                 if self.marked[i][j] == 1:
                     results += [(i, j)]
 
@@ -428,8 +428,8 @@ class Munkres:
     def __make_matrix(self, n, val):
         """Create an *n*x*n* matrix, populating it with the specific value."""
         matrix = []
-        for i in xrange(n):
-            matrix += [[val for j in xrange(n)]]
+        for i in range(n):
+            matrix += [[val for j in range(n)]]
         return matrix
 
     def __step1(self):
@@ -439,11 +439,11 @@ class Munkres:
         """
         C = self.C
         n = self.n
-        for i in xrange(n):
+        for i in range(n):
             minval = min(self.C[i])
             # Find the minimum value for this row and subtract that minimum
             # from every element in the row.
-            for j in xrange(n):
+            for j in range(n):
                 self.C[i][j] -= minval
 
         return 2
@@ -455,8 +455,8 @@ class Munkres:
         matrix. Go to Step 3.
         """
         n = self.n
-        for i in xrange(n):
-            for j in xrange(n):
+        for i in range(n):
+            for j in range(n):
                 if (self.C[i][j] == 0) and \
                    (not self.col_covered[j]) and \
                    (not self.row_covered[i]):
@@ -475,8 +475,8 @@ class Munkres:
         """
         n = self.n
         count = 0
-        for i in xrange(n):
-            for j in xrange(n):
+        for i in range(n):
+            for j in range(n):
                 if self.marked[i][j] == 1:
                     self.col_covered[j] = True
                     count += 1
@@ -565,8 +565,8 @@ class Munkres:
         lines.
         """
         minval = self.__find_smallest()
-        for i in xrange(self.n):
-            for j in xrange(self.n):
+        for i in range(self.n):
+            for j in range(self.n):
                 if self.row_covered[i]:
                     self.C[i][j] += minval
                 if not self.col_covered[j]:
@@ -576,8 +576,8 @@ class Munkres:
     def __find_smallest(self):
         """Find the smallest uncovered value in the matrix."""
         minval = sys.maxint
-        for i in xrange(self.n):
-            for j in xrange(self.n):
+        for i in range(self.n):
+            for j in range(self.n):
                 if (not self.row_covered[i]) and (not self.col_covered[j]):
                     if minval > self.C[i][j]:
                         minval = self.C[i][j]
@@ -615,7 +615,7 @@ class Munkres:
         the column index, or -1 if no starred element was found.
         """
         col = -1
-        for j in xrange(self.n):
+        for j in range(self.n):
             if self.marked[row][j] == 1:
                 col = j
                 break
@@ -628,7 +628,7 @@ class Munkres:
         the row index, or -1 if no starred element was found.
         """
         row = -1
-        for i in xrange(self.n):
+        for i in range(self.n):
             if self.marked[i][col] == 1:
                 row = i
                 break
@@ -641,7 +641,7 @@ class Munkres:
         the column index, or -1 if no starred element was found.
         """
         col = -1
-        for j in xrange(self.n):
+        for j in range(self.n):
             if self.marked[row][j] == 2:
                 col = j
                 break
@@ -649,7 +649,7 @@ class Munkres:
         return col
 
     def __convert_path(self, path, count):
-        for i in xrange(count+1):
+        for i in range(count+1):
             if self.marked[path[i][0]][path[i][1]] == 1:
                 self.marked[path[i][0]][path[i][1]] = 0
             else:
@@ -657,14 +657,14 @@ class Munkres:
 
     def __clear_covers(self):
         """Clear all covered matrix cells"""
-        for i in xrange(self.n):
+        for i in range(self.n):
             self.row_covered[i] = False
             self.col_covered[i] = False
 
     def __erase_primes(self):
         """Erase all prime markings"""
-        for i in xrange(self.n):
-            for j in xrange(self.n):
+        for i in range(self.n):
+            for j in range(self.n):
                 if self.marked[i][j] == 2:
                     self.marked[i][j] = 0
 
