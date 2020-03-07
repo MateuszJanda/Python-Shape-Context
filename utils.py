@@ -12,7 +12,7 @@ CANNY       = 1
 
 def get_elements(filename,treshold=50,minheight=15,minarea=200,elements=6):
     src = cv.LoadImage(filename, cv.CV_LOAD_IMAGE_GRAYSCALE)
-    test = cv.CreateImage(cv.GetSize(src),32,3)  
+    test = cv.CreateImage(cv.GetSize(src),32,3)
     dst = cv.CreateImage(cv.GetSize(src), 8, 1)
     storage = cv.CreateMemStorage(0)
     cv.Canny(src, dst, treshold, treshold*3, 3)
@@ -30,9 +30,9 @@ def get_elements(filename,treshold=50,minheight=15,minarea=200,elements=6):
         area = box[2]*box[3]
         #and (area > minarea)
         if (box[3] > minheight):
-            res.append(box) 
+            res.append(box)
         c = c.h_next()
-    
+
     if len(res) < elements:
         while len(res) < elements:
             m = 0
@@ -41,52 +41,52 @@ def get_elements(filename,treshold=50,minheight=15,minarea=200,elements=6):
                 if e[3] > m:
                     m = e[3]
                     c = i
-                    
+
             big = res.pop(c)
-            res.append((big[0],big[1],int(big[2]*1.0/2),big[3]))        
-            res.append((big[0]+int(big[2]*1.0/2),big[1],int(big[2]*1.0/2),big[3])) 
-    
+            res.append((big[0],big[1],int(big[2]*1.0/2),big[3]))
+            res.append((big[0]+int(big[2]*1.0/2),big[1],int(big[2]*1.0/2),big[3]))
+
     #for box in res:
-    #    cv.Rectangle(dst, (box[0],box[1]), (box[0]+box[2],box[1]+box[3]), cv.RGB(255,255,255))     
-        
+    #    cv.Rectangle(dst, (box[0],box[1]), (box[0]+box[2],box[1]+box[3]), cv.RGB(255,255,255))
+
     #cv.ShowImage('Preview2',dst)
-    #cv.WaitKey()   
-        
+    #cv.WaitKey()
+
     imgs = []
     print len(res)
     for box in res:
         cv.SetImageROI(src, box);
-     
+
         tmp = cv.CreateImage((box[2],box[3]),8,1)
-         
+
         cv.Copy(src, tmp);
         hq.heappush(imgs,(box[0],tmp))
-        
+
         cv.ResetImageROI(src);
-        
-    res = [hq.heappop(imgs)[1] for i in xrange(len(res))]  
-    return res   
-    
+
+    res = [hq.heappop(imgs)[1] for i in xrange(len(res))]
+    return res
+
 
 def euclid_distance(p1,p2):
     return math.sqrt( ( p2[0] - p1[0] ) ** 2 + ( p2[1] - p1[1] ) ** 2 )
-    
-    
+
+
 def get_points_from_img(src,treshold=50,simpleto=100,t=CANNY):
     ts = time.time()
     if isinstance(src,str):
         src = cv.LoadImage(src, cv.CV_LOAD_IMAGE_GRAYSCALE)
-    test = cv.CreateImage(cv.GetSize(src),8,1)  
+    test = cv.CreateImage(cv.GetSize(src),8,1)
     if t == CANNY:
         dst = cv.CreateImage(cv.GetSize(src), 8, 1)
         storage = cv.CreateMemStorage(0)
         cv.Canny(src, dst, treshold, treshold*3, 3)
-        
+
     A = zeros((cv.GetSize(src)[1],cv.GetSize(src)[0]))
     for y in xrange(cv.GetSize(src)[1]):
         for x in xrange(cv.GetSize(src)[0]):
-            A[y,x] = src[y,x]    
-    
+            A[y,x] = src[y,x]
+
     px,py = gradient(A)
     points = []
     w,h = cv.GetSize(src)
@@ -98,7 +98,7 @@ def get_points_from_img(src,treshold=50,simpleto=100,t=CANNY):
                 print x,y
             if c == 255:
                 points.append((x,y))
-    
+
     r = 2
     while len(points) > simpleto:
         newpoints = points
@@ -108,18 +108,18 @@ def get_points_from_img(src,treshold=50,simpleto=100,t=CANNY):
             if p[0] not in xr and p[1] not in yr:
                 newpoints.remove(p)
                 if len(points) <= simpleto:
-                    T = zeros((simpleto,1)) 
+                    T = zeros((simpleto,1))
                     for i,(x,y) in enumerate(points):
-                        T[i] = math.atan2(py[y,x],px[y,x])+pi/2;    
+                        T[i] = math.atan2(py[y,x],px[y,x])+pi/2;
                     return points,asmatrix(T)
         r += 1
-    T = zeros((simpleto,1)) 
+    T = zeros((simpleto,1))
     for i,(x,y) in enumerate(points):
-        T[i] = math.atan2(py[y,x],px[y,x])+pi/2;    
-        
+        T[i] = math.atan2(py[y,x],px[y,x])+pi/2;
+
     return points,asmatrix(T)
-    
-    
+
+
 def dist2(x,c):
     """
         Euclidian distance matrix
@@ -127,11 +127,11 @@ def dist2(x,c):
     ncentres = c.shape[0]
     ndata = x.shape[0]
     return (ones((ncentres, 1)) * (((power(x,2)).H)).sum(axis=0)).H + ones((ndata, 1)) * ((power(c,2)).H).sum(axis=0) - multiply(2,(x*(c.H)));
-    
+
 def bookenstain(X,Y,beta):
     """
         Bookstein PAMI89
-    
+
         Article: Principal Warps: Thin-Plate Splines and the Decomposition of Deformations
 
     """
@@ -153,7 +153,7 @@ def bookenstain(X,Y,beta):
     c = invL*(V.H)
     cx = c[:,0]
     cy = c[:,1]
-    
+
     Q = (c[0:N,:].H) * K * c[0:N,:]
     E = mean(diag(Q))
 
@@ -164,15 +164,15 @@ def bookenstain(X,Y,beta):
     aff_cost=log(s[0]/s[1])
 
     return cx,cy,E,aff_cost,L
-    
+
 def gauss_kernel(N):
     """
         Gaussian kernel
     """
     g=2**(1-N)*diag(fliplr(pascal(N)));
     W=g*g.H;
-   
-   
+
+
 def pascal(n, k = 0):
     """
         Pascal matrix
