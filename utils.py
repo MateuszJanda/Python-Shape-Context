@@ -45,8 +45,8 @@ def get_elements(filename,treshold=50,minheight=15,minarea=200,elements=6):
     #for box in res:
     #    cv.Rectangle(dst, (box[0],box[1]), (box[0]+box[2],box[1]+box[3]), cv.RGB(255,255,255))
 
-    #cv.ShowImage('Preview2',dst)
-    #cv.WaitKey()
+    #cv.imshow('Preview2',dst)
+    #cv.waitKey(0)
 
     tiebreaker = itertools.count()
 

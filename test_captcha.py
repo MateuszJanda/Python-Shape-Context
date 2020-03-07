@@ -39,14 +39,14 @@ if __name__ == '__main__':
     y1 = [400-p[1] for p in points1]
 
     for i,img in enumerate(imgs):
-        cv.ShowImage('Preview - %s' % i,img)
-        cv.WaitKey()
+        cv.imshow('Preview - %s' % i,img)
+        cv.waitKey(0)
     sys.exit()
 
     for img in imgs:
 
-        cv.ShowImage('Preview2',img)
-        cv.WaitKey()
+        cv.imshow('Preview2',img)
+        cv.waitKey(0)
 
         points2,t2 = get_points_from_img(img,simpleto=sampls)
 
