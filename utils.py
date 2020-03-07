@@ -12,12 +12,8 @@ CANNY       = 1
 
 def get_elements(filename,treshold=50,minheight=15,minarea=200,elements=6):
     src = cv.imread(filename, cv.IMREAD_GRAYSCALE)
-    test = np.zeros(shape=(src.shape[0], src.shape[1], 3), dtype="uint8")
-    dst = np.zeros(shape=(src.shape[0], src.shape[1], 1), dtype="uint8")
-    storage = cv.CreateMemStorage(0)
-    cv.Canny(src, dst, treshold, treshold*3, 3)
+    dst = cv.Canny(src, treshold, treshold*3, 3)
 
-    storage = cv.CreateMemStorage(0)
     seqs = cv.FindContours(dst, storage,cv.CV_RETR_TREE, cv.CV_CHAIN_APPROX_NONE, (0,0))
 
     res = []
@@ -57,7 +53,7 @@ def get_elements(filename,treshold=50,minheight=15,minarea=200,elements=6):
     for box in res:
         cv.SetImageROI(src, box);
 
-        tmp = cv.CreateImage((box[2],box[3]),8,1)
+        tmp = np.zeros(shape=(box[2],box[3]), dtype="uint8")
 
         cv.Copy(src, tmp);
         hq.heappush(imgs,(box[0],tmp))
@@ -76,11 +72,8 @@ def get_points_from_img(src,treshold=50,simpleto=100,t=CANNY):
     ts = time.time()
     if isinstance(src,str):
         src = cv.imread(src, cv.IMREAD_GRAYSCALE)
-    test = cv.CreateImage(cv.GetSize(src),8,1)
     if t == CANNY:
-        dst = cv.CreateImage(cv.GetSize(src), 8, 1)
-        storage = cv.CreateMemStorage(0)
-        cv.Canny(src, dst, treshold, treshold*3, 3)
+        dst = cv.Canny(src, treshold, treshold*3, 3)
 
     A = zeros((cv.GetSize(src)[1],cv.GetSize(src)[0]))
     for y in xrange(cv.GetSize(src)[1]):
