@@ -154,6 +154,7 @@ def bookenstain(X,Y,beta):
     s=linalg.svd(A);
     aff_cost=log(s[0]/s[1])
 
+    print('bookenstain() aff_cost:', aff_cost)
     return cx,cy,E,aff_cost,L
 
 def gauss_kernel(N):
