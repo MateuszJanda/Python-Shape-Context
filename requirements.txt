@@ -1,0 +1,4 @@
+numpy >= 1.18.1
+opencv-python >= 4.2.0.32
+opencv-contrib-python >= 4.2.0.32
+ipython >= 7.13.0
