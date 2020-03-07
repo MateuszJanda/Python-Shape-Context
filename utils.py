@@ -6,6 +6,7 @@ import math
 import numpy as np
 from numpy import *
 from scipy.spatial.distance import euclidean
+import itertools
 import heapq as hq
 
 CANNY       = 1
@@ -18,16 +19,15 @@ def get_elements(filename,treshold=50,minheight=15,minarea=200,elements=6):
 
     res = []
 
-    c = seqs.h_next()
-    while True:
-        if not c:
+    while seqs:
+        c = seqs.pop()
+        if not c.size:
             break
-        box = cv.BoundingRect(c)
+        box = cv.boundingRect(c)
         area = box[2]*box[3]
         #and (area > minarea)
         if (box[3] > minheight):
             res.append(box)
-        c = c.h_next()
 
     if len(res) < elements:
         while len(res) < elements:
@@ -48,19 +48,17 @@ def get_elements(filename,treshold=50,minheight=15,minarea=200,elements=6):
     #cv.ShowImage('Preview2',dst)
     #cv.WaitKey()
 
+    tiebreaker = itertools.count()
+
     imgs = []
     print(len(res))
     for box in res:
-        cv.SetImageROI(src, box);
+        x, y, width, height = box
+        tmp = src[y:y+height, x:x+width]
+        hq.heappush(imgs,(box[0], next(tiebreaker), tmp))
 
-        tmp = np.zeros(shape=(box[2],box[3]), dtype="uint8")
 
-        cv.Copy(src, tmp);
-        hq.heappush(imgs,(box[0],tmp))
-
-        cv.ResetImageROI(src);
-
-    res = [hq.heappop(imgs)[1] for i in range(len(res))]
+    res = [hq.heappop(imgs)[2] for i in range(len(res))]
     return res
 
 
