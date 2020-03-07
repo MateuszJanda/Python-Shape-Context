@@ -60,7 +60,7 @@ def get_elements(filename,treshold=50,minheight=15,minarea=200,elements=6):
 
         cv.ResetImageROI(src);
 
-    res = [hq.heappop(imgs)[1] for i in xrange(len(res))]
+    res = [hq.heappop(imgs)[1] for i in range(len(res))]
     return res
 
 
@@ -75,16 +75,16 @@ def get_points_from_img(src,treshold=50,simpleto=100,t=CANNY):
     if t == CANNY:
         dst = cv.Canny(src, treshold, treshold*3, 3)
 
-    A = zeros((cv.GetSize(src)[1],cv.GetSize(src)[0]))
-    for y in xrange(cv.GetSize(src)[1]):
-        for x in xrange(cv.GetSize(src)[0]):
+    A = np.zeros(shape=src.shape)
+    for y in range(src.shape[0]):
+        for x in range(src.shape[1]):
             A[y,x] = src[y,x]
 
     px,py = gradient(A)
     points = []
-    w,h = cv.GetSize(src)
-    for y in xrange(h):
-        for x in xrange(w):
+    h,w = src.shape
+    for y in range(h):
+        for x in range(w):
             try:
                 c = dst[y,x]
             except:

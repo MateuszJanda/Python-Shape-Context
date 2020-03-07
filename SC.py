@@ -12,7 +12,7 @@ import sys
 seterr(all='ignore')
 
 def logspace(d1, d2, n):
-    sp =  [( 10 **(d1 + k * (d2-d1)/(n - 1)))   for k in xrange(0, n -1)]
+    sp =  [( 10 **(d1 + k * (d2-d1)/(n - 1)))   for k in range(0, n -1)]
     sp.append(10 ** d2)
     return sp
 
@@ -39,16 +39,16 @@ class SC(object):
 
     def _dist2(self, x, c):
         result = zeros((len(x), len(c)))
-        for i in xrange(len(x)):
-            for j in xrange(len(c)):
+        for i in range(len(x)):
+            for j in range(len(c)):
                 result[i,j] = euclid_distance(x[i],c[j])
         return result
 
 
     def _get_angles(self, x):
         result = zeros((len(x), len(x)))
-        for i in xrange(len(x)):
-            for j in xrange(len(x)):
+        for i in range(len(x)):
+            for j in range(len(x)):
                 result[i,j] = get_angle(x[i],x[j])
         return result
 
@@ -71,7 +71,7 @@ class SC(object):
         r_bin_edges = logspace(log10(self.r_inner),log10(self.r_outer),self.nbins_r)
 
         r_array_q = zeros((len(points),len(points)), dtype=int)
-        for m in xrange(self.nbins_r):
+        for m in range(self.nbins_r):
            r_array_q +=  (r_array_n < r_bin_edges[m])
 
         fz = r_array_q > 0
@@ -89,9 +89,9 @@ class SC(object):
 
 
         BH = zeros((len(points),self.nbins))
-        for i in xrange(len(points)):
+        for i in range(len(points)):
             sn = zeros((self.nbins_r, self.nbins_theta))
-            for j in xrange(len(points)):
+            for j in range(len(points)):
                 if (fz[i, j]):
                     sn[r_array_q[i, j] - 1, theta_array_q[i, j] - 1] += 1
             BH[i] = sn.reshape(self.nbins)
@@ -103,7 +103,7 @@ class SC(object):
 
     def _cost(self,hi,hj):
         cost = 0
-        for k in xrange(self.nbins):
+        for k in range(self.nbins):
             if (hi[k] + hj[k]):
                 cost += ( (hi[k] - hj[k])**2 ) / ( hi[k] + hj[k] )
 
@@ -117,8 +117,8 @@ class SC(object):
         if qlength:
             d = qlength
         C = zeros((p,p2))
-        for i in xrange(p):
-            for j in xrange(p2):
+        for i in range(p):
+            for j in range(p2):
                 C[i,j] = self._cost(Q[j]/d,P[i]/p)
 
         return C
@@ -144,12 +144,12 @@ class SC(object):
 
         p,_ = P.shape
         q,_ = Qs.shape
-        for i in xrange(p):
-            for j in xrange(q):
+        for i in range(p):
+            for j in range(q):
                 heapq.heappush(res,(self._cost(P[i],Qs[j]),i) )
 
         data = zeros((q,self.nbins))
-        for i in xrange(q):
+        for i in range(q):
             data[i] = P[heapq.heappop(res)[1]]
 
         return self.diff(data,Qs)
@@ -181,10 +181,10 @@ class SC(object):
 
         # get r shape contexts with maximum number(-BH[i]) or minimum(+BH[i]) of connected elements
         # this gives same result for same query
-        for i in xrange(len(BH)):
+        for i in range(len(BH)):
             heapq.heappush(sums,(BH[i].sum(),i))
 
-        for i in xrange(r):
+        for i in range(r):
             _,l = heapq.heappop(sums)
             res[i] = BH[l]
             used.append(l)
@@ -201,7 +201,7 @@ class SC(object):
         xs = [0]*len(P1)
         y = [0]*len(P1)
         ys = [0]*len(P1)
-        for i in xrange(len(P1)):
+        for i in range(len(P1)):
             x[i]  = P1[i][0]
             xs[i] = P2[i][0]
             y[i]  = P1[i][1]
