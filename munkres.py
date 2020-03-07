@@ -832,10 +832,16 @@ if __name__ == '__main__':
        [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2]], dtype='float32')
 
     cost_matrix = cost_matrix.tolist()
-    # cost_matrix, _ = matrices[1]
+
+    # Print example cost matrix in C++ syntax
+    test_cost_matrix, _ = matrices[0]
+    test_values = "".join([str(val) + ", " for val in np.array(test_cost_matrix).flatten().tolist()[:-1]])
+    test_values += str(np.array(test_cost_matrix).flatten().tolist()[-1])
+    print("cv::Mat testCostMat = (cv::Mat_<int>(3, 3) << " + test_values + ");")
 
     m = Munkres()
-    result = m.compute(cost_matrix)
+    # result = m.compute(cost_matrix)
+    result = m.compute(test_cost_matrix)
 
     print(result)
 
