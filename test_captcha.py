@@ -1,6 +1,6 @@
 from utils import get_points_from_img,get_elements
 from SC import SC
-import cv
+import cv2 as cv
 from numpy import *
 import sys
 
@@ -86,17 +86,17 @@ if __name__ == '__main__':
                 costmat_theta=0.5*(1-cos(2*theta_diff))
 
 
-            print costmat_shape.shape,costmat_theta.shape
+            print(costmat_shape.shape,costmat_theta.shape)
             costmat=(1-ori_weight)*costmat_shape+ori_weight*costmat_theta;
 
             a1=costmat.min(0)
             a2=costmat.min(1)
             sc_cost=max(mean(a1),mean(a2));
 
-            print "Shape cost: %s\nBending energy: %s\nAffine Cost: %s\n" % (sc_cost,diff,affcost)
+            print("Shape cost: %s\nBending energy: %s\nAffine Cost: %s\n" % (sc_cost,diff,affcost))
 
             TOTAL = 0.1*diff+sc_cost+0.3*affcost
-            print 'TOTAL MATCH:',TOTAL
+            print('TOTAL MATCH:',TOTAL)
 
             make_graph((x1,y1),(x2,y2),TOTAL,LINES)
 

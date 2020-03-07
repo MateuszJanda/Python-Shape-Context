@@ -14,7 +14,7 @@ def get_elements(filename,treshold=50,minheight=15,minarea=200,elements=6):
     src = cv.imread(filename, cv.IMREAD_GRAYSCALE)
     dst = cv.Canny(src, treshold, treshold*3, 3)
 
-    seqs = cv.FindContours(dst, storage,cv.CV_RETR_TREE, cv.CV_CHAIN_APPROX_NONE, (0,0))
+    seqs, _ = cv.findContours(dst, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
 
     res = []
 
