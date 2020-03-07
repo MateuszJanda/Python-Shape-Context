@@ -87,10 +87,10 @@ if __name__ == '__main__':
     a2=costmat.min(1)
     sc_cost=max(mean(a1),mean(a2));
 
-    print "Shape cost: %s\nBending energy: %s\nAffine Cost: %s\n" % (sc_cost,diff,affcost)
+    print("Shape cost: %s\nBending energy: %s\nAffine Cost: %s\n" % (sc_cost,diff,affcost))
 
     TOTAL = 0.1*diff+sc_cost+0.3*affcost
-    print 'TOTAL MATCH:',TOTAL
+    print('TOTAL MATCH:',TOTAL)
 
     make_graph((x1,y1),(x2,y2),TOTAL,LINES)
 

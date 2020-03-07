@@ -6,7 +6,7 @@ import munkres
 from utils import get_points_from_img,get_elements,bookenstain
 import time
 import heapq
-import cv
+import cv2 as cv
 import sys
 
 seterr(all='ignore')
@@ -96,7 +96,7 @@ class SC(object):
                     sn[r_array_q[i, j] - 1, theta_array_q[i, j] - 1] += 1
             BH[i] = sn.reshape(self.nbins)
 
-        print 'PROFILE TOTAL COST: ' + str(time.time()-t)
+        print('PROFILE TOTAL COST: ' + str(time.time()-t))
 
         return BH
 
@@ -131,7 +131,7 @@ class SC(object):
         for row, column in indexes:
             value = C[row][column]
             total += value
-        print 'PROFILE HUNGURIAN ALGORITHM: ' + str(time.time()-t)
+        print('PROFILE HUNGURIAN ALGORITHM: ' + str(time.time()-t))
 
         return total,indexes
 
@@ -219,7 +219,7 @@ class SC(object):
 
         cx,cy,E,affcost,L = bookenstain(P1,P2,15)
 
-        print 'PROFILE TPS INTERPOLATION: ' + str(time.time()-t)
+        print('PROFILE TPS INTERPOLATION: ' + str(time.time()-t))
 
         return fx,fy,E,float(affcost)
 

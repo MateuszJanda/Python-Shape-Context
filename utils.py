@@ -1,9 +1,9 @@
 import sys
 from math import sin, cos, sqrt, pi
-import cv
-import urllib2
+import cv2 as cv
 import time
 import math
+import numpy as np
 from numpy import *
 from scipy.spatial.distance import euclidean
 import heapq as hq
@@ -11,9 +11,9 @@ import heapq as hq
 CANNY       = 1
 
 def get_elements(filename,treshold=50,minheight=15,minarea=200,elements=6):
-    src = cv.LoadImage(filename, cv.CV_LOAD_IMAGE_GRAYSCALE)
-    test = cv.CreateImage(cv.GetSize(src),32,3)
-    dst = cv.CreateImage(cv.GetSize(src), 8, 1)
+    src = cv.imread(filename, cv.IMREAD_GRAYSCALE)
+    test = np.zeros(shape=(src.shape[0], src.shape[1], 3), dtype="uint8")
+    dst = np.zeros(shape=(src.shape[0], src.shape[1], 1), dtype="uint8")
     storage = cv.CreateMemStorage(0)
     cv.Canny(src, dst, treshold, treshold*3, 3)
 
@@ -53,7 +53,7 @@ def get_elements(filename,treshold=50,minheight=15,minarea=200,elements=6):
     #cv.WaitKey()
 
     imgs = []
-    print len(res)
+    print(len(res))
     for box in res:
         cv.SetImageROI(src, box);
 
@@ -75,7 +75,7 @@ def euclid_distance(p1,p2):
 def get_points_from_img(src,treshold=50,simpleto=100,t=CANNY):
     ts = time.time()
     if isinstance(src,str):
-        src = cv.LoadImage(src, cv.CV_LOAD_IMAGE_GRAYSCALE)
+        src = cv.imread(src, cv.IMREAD_GRAYSCALE)
     test = cv.CreateImage(cv.GetSize(src),8,1)
     if t == CANNY:
         dst = cv.CreateImage(cv.GetSize(src), 8, 1)
@@ -95,7 +95,7 @@ def get_points_from_img(src,treshold=50,simpleto=100,t=CANNY):
             try:
                 c = dst[y,x]
             except:
-                print x,y
+                print(x,y)
             if c == 255:
                 points.append((x,y))
 
